@@ -143,14 +143,14 @@ server.on("upgrade", (req, socket, head) => {
 
 // ── Game constants ──────────────────────────────────────────────────────
 const DURATION = 180, TICK = 20, W = 800, H = 600;
-const ORIGIN_Y = 80, SWING_SPD = 0.03, EXT_SPD = 5, RET_SPD = 3, MAX_LEN = 480;
+const ORIGIN_Y = 80, SWING_SPD = 0.03, EXT_SPD = 5, RET_SPD = 3;
 
 const ITEM_DEFS = {
-    smallGold: { value: 50,   weight: 1, radius: 15 },
-    bigGold:   { value: 200,  weight: 3, radius: 25 },
-    diamond:   { value: 500,  weight: 1, radius: 12 },
-    rock:      { value: 10,   weight: 5, radius: 20 },
-    bomb:      { value: -100, weight: 1, radius: 14 }
+    smallGold: { value: 50,   weight: 1, radius: 20 },
+    bigGold:   { value: 200,  weight: 3, radius: 40 },
+    diamond:   { value: 500,  weight: 1, radius: 20 },
+    rock:      { value: 10,   weight: 5, radius: 40 },
+    bomb:      { value: -100, weight: 1, radius: 25 }
 };
 
 function createItems(startId) {
@@ -244,26 +244,23 @@ function tick(room) {
 
         } else if (p.hookState === "extending") {
             p.hookLength += EXT_SPD * spd;
-            if (p.hookLength >= MAX_LEN) { p.hookState = "retracting"; }
+            const tip = hookTip(p);
+            if (tip.x < 0 || tip.x > W || tip.y < 0 || tip.y > H) { p.hookState = "retracting"; }
             else {
-                const tip = hookTip(p);
-                if (tip.x < 0 || tip.x > W || tip.y > H) { p.hookState = "retracting"; }
-                else {
-                    for (const it of room.items) {
-                        if (it.scored || it.caughtBy === i) continue;
-                        let ix, iy;
-                        if (it.caught && it.caughtBy >= 0) {
-                            const ct = hookTip(room.players[it.caughtBy]);
-                            ix = ct.x; iy = ct.y;
-                        } else if (!it.caught) { ix = it.x; iy = it.y; }
-                        else continue;
-                        if (Math.hypot(tip.x - ix, tip.y - iy) < it.radius + 10) {
-                            if (it.caught && it.caughtBy >= 0 && it.caughtBy !== i)
-                                room.players[it.caughtBy].caughtItem = null;
-                            it.caught = true; it.caughtBy = i;
-                            p.caughtItem = it.id; p.hookState = "retracting";
-                            break;
-                        }
+                for (const it of room.items) {
+                    if (it.scored || it.caughtBy === i) continue;
+                    let ix, iy;
+                    if (it.caught && it.caughtBy >= 0) {
+                        const ct = hookTip(room.players[it.caughtBy]);
+                        ix = ct.x; iy = ct.y;
+                    } else if (!it.caught) { ix = it.x; iy = it.y; }
+                    else continue;
+                    if (Math.hypot(tip.x - ix, tip.y - iy) < it.radius + 10) {
+                        if (it.caught && it.caughtBy >= 0 && it.caughtBy !== i)
+                            room.players[it.caughtBy].caughtItem = null;
+                        it.caught = true; it.caughtBy = i;
+                        p.caughtItem = it.id; p.hookState = "retracting";
+                        break;
                     }
                 }
             }
