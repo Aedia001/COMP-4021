@@ -207,6 +207,7 @@ const Game = (function() {
         for (let i = 0; i < 2; i++) {
             const p = gameState.players[i];
             const t = tip(p);
+            const ropeAngle = Math.atan2(t.y - p.hookOriginY, t.x - p.hookOriginX);
 
             // Rope
             ctx.strokeStyle = p.cheatMode ? "#FF3333" : "#A08060";
@@ -216,11 +217,15 @@ const Game = (function() {
             ctx.stroke(); ctx.setLineDash([]);
 
             // Claw
-            ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(p.hookAngle);
+            const facing = p.hookState === "swinging" ? p.hookDir : (t.x >= p.hookOriginX ? 1 : -1);
+            ctx.save();
+            ctx.translate(t.x, t.y);
+            ctx.rotate(ropeAngle - Math.PI / 2);
+            ctx.scale(facing, 1);
             ctx.fillStyle = "#C0C0C0"; ctx.strokeStyle = "#808080"; ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(-9, 0); ctx.lineTo(-6, 10); ctx.lineTo(0, 4);
-            ctx.lineTo(6, 10); ctx.lineTo(9, 0);
+            ctx.moveTo(-8, 0); ctx.lineTo(-5, 10); ctx.lineTo(0, 4);
+            ctx.lineTo(7, 11); ctx.lineTo(10, 2); ctx.lineTo(2, -6);
             ctx.closePath(); ctx.fill(); ctx.stroke();
             ctx.restore();
 
@@ -247,8 +252,23 @@ const Game = (function() {
 
             // Cheat indicator
             if (p.cheatMode) {
-                ctx.fillStyle = "#FF3333"; ctx.font = "bold 11px Arial";
-                ctx.fillText("[CHEAT]", p.hookOriginX, p.hookOriginY - 28);
+                const label = "CHEAT";
+                const cx = p.hookOriginX + (i === 0 ? 52 : -52);
+                const cy = p.hookOriginY - 16;
+                ctx.save();
+                ctx.font = "bold 10px Arial";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                const w = ctx.measureText(label).width + 12;
+                const h = 16;
+                ctx.fillStyle = "rgba(0,0,0,0.7)";
+                ctx.fillRect(cx - w / 2, cy - h / 2, w, h);
+                ctx.strokeStyle = "#FF3333";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(cx - w / 2, cy - h / 2, w, h);
+                ctx.fillStyle = "#FF3333";
+                ctx.fillText(label, cx, cy + 0.5);
+                ctx.restore();
             }
         }
     }
