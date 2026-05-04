@@ -1,0 +1,24 @@
+{
+  "1": {
+    "name": "1",
+    "avatar": "Rabbit Face",
+    "gamesPlayed": 1,
+    "wins": 0,
+    "losses": 1,
+    "draws": 0,
+    "totalScore": 70,
+    "totalGold": 1,
+    "totalDiamonds": 0
+  },
+  "2": {
+    "name": "2",
+    "avatar": "Rabbit Face",
+    "gamesPlayed": 1,
+    "wins": 1,
+    "losses": 0,
+    "draws": 0,
+    "totalScore": 170,
+    "totalGold": 3,
+    "totalDiamonds": 0
+  }
+}

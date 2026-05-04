@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gold Miner Dual PK</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ═══════════ HOME PAGE ═══════════ -->
+    <div id="home-page">
+
+        <!-- Start page -->
+        <div id="start-section">
+            <div class="game-banner">
+                <div class="game-title">⛏️ Gold Miner Dual PK ⛏️</div>
+                <div class="game-subtitle">A Two-Player Mining Competition!</div>
+            </div>
+            <div class="game-desc">
+                <p>Race against another miner to collect the most valuable treasures underground!
+                   Launch your hook at the right moment to grab gold, diamonds, and more.
+                   But watch out &mdash; your opponent can <strong>steal items</strong> right from your hook!</p>
+                <h4>🎮 How to Play</h4>
+                <ul>
+                    <li>Press <kbd>SPACE</kbd> to launch your mining hook</li>
+                    <li>The hook swings automatically &mdash; time your press carefully!</li>
+                    <li>Catch gold nuggets, diamonds, and other items for points</li>
+                    <li>You can steal items the other player is currently catching!</li>
+                    <li>Avoid bombs (<span class="red">-100 pts</span>)!</li>
+                    <li>Game lasts <strong>3 minutes</strong> &mdash; highest score wins!</li>
+                </ul>
+                <h4>💰 Items &amp; Values</h4>
+                <div class="item-table">
+                    <span class="it gold-sm">🥇 Small Gold &mdash; 50 pts</span>
+                    <span class="it gold-lg">🏆 Big Gold &mdash; 200 pts</span>
+                    <span class="it diamond">💎 Diamond &mdash; 500 pts</span>
+                    <span class="it rock">🪨 Rock &mdash; 10 pts (heavy!)</span>
+                    <span class="it bomb">💣 Bomb &mdash; -100 pts</span>
+                </div>
+            </div>
+            <div class="btn-row">
+                <button id="start-signin-button" class="btn-primary">Sign In</button>
+                <button id="start-register-button" class="btn-secondary">Register</button>
+            </div>
+        </div>
+
+        <!-- Register form -->
+        <div id="register-section" class="form-page" style="display:none">
+            <form id="register-form" class="auth-form">
+                <div class="form-title">📝 Register</div>
+                <input id="register-username" maxlength="10" placeholder="Username" autocomplete="off">
+                <select id="register-avatar">
+                    <option class="placeholder" value="">Select your avatar</option>
+                </select>
+                <input id="register-name" maxlength="16" placeholder="Display Name" autocomplete="off">
+                <input id="register-password" type="password" placeholder="Password">
+                <input id="register-confirm" type="password" placeholder="Confirm Password">
+                <div class="btn-row">
+                    <button id="register-button" type="submit" class="btn-primary">Register</button>
+                    <button class="back-button btn-secondary" type="button">Back</button>
+                </div>
+                <div id="register-message" class="message"></div>
+            </form>
+        </div>
+
+        <!-- Sign-in form -->
+        <div id="signin-section" class="form-page" style="display:none">
+            <form id="signin-form" class="auth-form">
+                <div class="form-title">🔑 Sign In</div>
+                <input id="signin-username" placeholder="Username" autocomplete="off">
+                <input id="signin-password" type="password" placeholder="Password">
+                <div class="btn-row">
+                    <button id="signin-button" type="submit" class="btn-primary">Sign In</button>
+                    <button class="back-button btn-secondary" type="button">Back</button>
+                </div>
+                <div id="signin-message" class="message"></div>
+            </form>
+        </div>
+
+        <!-- Lobby -->
+        <div id="lobby-section" style="display:none">
+            <div class="lobby-header">
+                <span class="lobby-user">
+                    <span id="user-avatar"></span>
+                    <span id="user-name"></span>
+                </span>
+                <button id="signout-button" class="btn-small">Sign Out</button>
+            </div>
+            <div class="lobby-body">
+                <h2>🏠 Game Lobby</h2>
+                <div class="online-panel">
+                    <h4>Online Players</h4>
+                    <ul id="player-list"></ul>
+                </div>
+                <button id="find-match-button" class="btn-big">🎮 Find Match</button>
+                <button id="cancel-match-button" class="btn-big btn-cancel" style="display:none">✖ Cancel</button>
+                <div id="match-status" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ GAME PAGE ═══════════ -->
+    <div id="game-page" style="display:none">
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+        <div id="game-controls-hint">
+            Press <kbd>SPACE</kbd> to launch hook &nbsp;|&nbsp; Press <kbd>C</kbd> to toggle cheat mode
+        </div>
+        <audio id="catch-sound" src="sounds/catch.wav" preload="auto"></audio>
+        <audio id="bomb-sound" src="sounds/bomb.wav" preload="auto"></audio>
+        <audio id="bgm" src="sounds/bgm.wav" preload="auto" loop></audio>
+    </div>
+
+    <!-- ═══════════ GAME OVER PAGE ═══════════ -->
+    <div id="gameover-page" style="display:none">
+        <div class="gameover-box">
+            <h1 id="gameover-title"></h1>
+            <div id="gameover-stats"></div>
+            <h3>🏆 Player Rankings</h3>
+            <table id="ranking-table">
+                <thead>
+                    <tr><th>#</th><th>Player</th><th>W</th><th>L</th><th>D</th><th>Total Score</th></tr>
+                </thead>
+                <tbody id="ranking-body"></tbody>
+            </table>
+            <div class="btn-row">
+                <button id="play-again-button" class="btn-primary">🎮 Play Again</button>
+                <button id="back-home-button" class="btn-secondary">🏠 Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/avatar.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/game_room.js"></script>
+    <script>
+    $(function() {
+        GameRoom.init();
+        GameRoom.validate();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "1": {
+    "avatar": "Rabbit Face",
+    "name": "1",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$1LXk9OjIAXcAgJVk7OsxNg$sIC2hjztqaGFgMBxUffqezBsa46PUJPE/jQhM3VJyz0"
+  },
+  "2": {
+    "avatar": "Rabbit Face",
+    "name": "2",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$lDFqpjBycHW9KL4MAKI4+w$geMo7vS6JavIH9Xoz/7w6rhlcSE6IJ4Zs5VlQX/gJF8"
+  }
+}
