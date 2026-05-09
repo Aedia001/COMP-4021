@@ -142,7 +142,7 @@ server.on("upgrade", (req, socket, head) => {
 });
 
 // ── Game constants ──────────────────────────────────────────────────────
-const DURATION = 180, TICK = 20, W = 800, H = 600;
+const DURATION = 120, TICK = 20, W = 800, H = 600;
 const ORIGIN_Y = 80, SWING_SPD = 0.03, EXT_SPD = 5, RET_SPD = 3;
 
 const ITEM_DEFS = {
